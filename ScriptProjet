@@ -1,0 +1,4 @@
+make
+time ./bin/main
+gnuplot script.gnu -persist
+gnuplot script2.gnu -persist

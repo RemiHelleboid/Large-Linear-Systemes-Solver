@@ -1,0 +1,32 @@
+PROJET : CALCUL SCIENTIFIQUE POUR LES GRANDS SYSTMES LINEAIRES
+Rémi HELLEBOID 
+
+Exécuter le projet : Il suffit d'ouvrir un terminal dans le répertoire "PROJET RH" et d'entrer l'instruction :
+>bash ScriptProjet
+Puis il faut entrer la taille de la matrice B d'ont on veut calculer la SVD.
+
+Affichage dans le terminal : 
+	-le vecteur solution de l'équation Ax=b (*1)
+	-Les valeurs de ||B-B(k)|| pour l'algorithme de décompostion en valeurs singulière de la bibliothèque Eigen
+	-Les valeurs de ||B-B(k)|| pour l'algorithme de décompostion en valeurs singulière CrossAprox de la classe FredholmMatrix
+
+Affichage à l'écran:
+	-Une fenêtre GNUPLOT s'ouvre et affiche les courbes des valeurs précédentes en fonctions de k, pour k=1...15(*2), avec échelles d'abscisses et d'ordonnées 	 logarithmiques, le graphe est enregistré dans le répértoire "PROJET RH" sous le nom graphe.png.
+
+Informations complémentaires :
+
+Vous remarquerez la présence d'une méthode SVD et d'une méthode SVDEigen.
+La première qui utilise la bibliohèque REDSVD respecte mieux la demande du projet car elle permet de calculer la SVD tronquée à l'ordre r d'une matrice.
+Néanmoins pour la matrice B du projet, elle donne des résultats incohérents, notamment B(N) est très différente de B pour N=taille de la matrice.
+Le problème vient d'erreurs d'arrondis notament car la bibliothèque travaille avec des floats et pas des doubles, ce qu'on ne peut pas changer.
+(https://code.google.com/archive/p/redsvd/issues/6).J'ai du mettre les .hpp et .cpp de la bibliothèque avec ceux du code.
+
+La méthode JacobiSVD de la bibliothèque Eigen marche bien mais on ne peut pas calculer la SVD tronquée directement, donc les valeurs de B(k) sont "reconstituées". D'où l'ajout des méthodes CoefSVD(i,j).
+En conséquence, en temps, la méthode SVD est plus longue que CrossAprox pour calculer les 15 premières B(k) car en réalité elle calcule toute la SVD.
+
+La méthode CrossAproxCompute est la même que CrossApprox. Elle permet juste de calculer les normes ||B-B(k)|| sans recommencer la SVD à zéro.
+
+(*1) : A est la matrice du Laplacien par discrétisation par différences finies, b=(1,1,...,1)
+(*2) : J'ai choisi de prendre les 15 premières valeurs plutot que 10 car on peut bien observer un palier de ||B-B(k)|| à partir de k=10 environ. 
+
+
